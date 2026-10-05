@@ -10,7 +10,7 @@ onMounted(async () => {
 </script>
 <template>
   <h1>违规</h1>
-  <p class="sub">间距不足或同试卷四邻相邻</p>
+  <p class="sub">间距不足、同试卷四邻相邻、或同排准考证尾号重复</p>
   <div class="card">
     <table>
       <thead><tr><th>类型</th><th>考生A</th><th>考生B</th><th>说明</th></tr></thead>
