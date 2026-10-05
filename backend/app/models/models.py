@@ -32,3 +32,22 @@ class SeatPlan(Base):
     hall_id: Mapped[int] = mapped_column(ForeignKey("halls.id"))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     result_json: Mapped[str] = mapped_column(Text, default="{}")
+
+
+class SeatJournal(Base):
+    """只追加（append-only）占座流水账。
+
+    每一段对应一次成功排座（plan_id），段内按准考证升序、seq 从 1 开始。
+    应用层永不 UPDATE / DELETE 历史行：改号只会 INSERT 新的一段，
+    旧段原封不动，用于重放当时的排座图。
+    """
+    __tablename__ = "seat_journal"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    hall_id: Mapped[int] = mapped_column(ForeignKey("halls.id"))
+    plan_id: Mapped[int] = mapped_column(ForeignKey("seat_plans.id"))
+    seq: Mapped[int] = mapped_column(Integer)
+    ticket_no: Mapped[str] = mapped_column(String(32))
+    candidate_id: Mapped[int] = mapped_column(ForeignKey("candidates.id"))
+    row: Mapped[int] = mapped_column(Integer)
+    col: Mapped[int] = mapped_column(Integer)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
